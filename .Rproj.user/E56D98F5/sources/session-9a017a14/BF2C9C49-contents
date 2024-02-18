@@ -1,0 +1,126 @@
+---
+title: "HW1 - BIMS 8701"
+author: "Edward Chen"
+date: "2024-02-14"
+output: html_document
+---
+
+# BIMS 8701 Assignment 1: Statistics Review
+Due February 19, 2024
+```{r}
+library(Biostrings)
+```
+## A. This section is to help you get familiar with Bioconductor.
+
+A.1. What version of Bioconductor are you using? (0.5 pt)
+```{r}
+library(BiocManager)
+```
+3.18
+A.2. What version of BiocManager do you have installed? (0.5 pt)
+1.30.22
+
+A.3. How many total packages are available to be installed by BiocManager? Answer
+this question using `BiocManager::available` (1 pt)
+```{r}
+length(BiocManager::available())
+```
+23964 
+
+A.4. Download the Illumina TruSeq adapters bundled with the trimmomatic software
+from here: https://github.com/timflutre/trimmomatic/blob/master/adapters/TruSeq3-PE-
+2.fa -- then, use the Biostrings package to read the file into R, and then count the
+frequency of each base for each sequence. (1 pt)
+
+```{r}
+dna_set <- readDNAStringSet("./adapters/TruSeq3-PE-2.fa")
+data = letterFrequency(dna_set, letters=alphabet(dna_set))
+col_sums = apply(data, 2, sum)
+total_sum = sum(col_sums)
+result = col_sums/total_sum
+result[1:4]
+```
+
+A.5. What is the most frequently used nucleotide in these sequences overall, and what
+is its overall frequency expressed as a percentage? (1 pt)
+
+The most frequently used nucleotide is C with a overall frequency of 27.94118%.
+
+A.6. Compute the standard deviation across sequences of the frequency of each base.
+Which nucleotide has the highest standard deviation and what is it? (1 pt)
+```{r}
+result = apply(data, 2, sd)
+result[1:4]
+```
+The nucleotide G has the highest standard deviation with a standard deviation of 4.335897.
+
+## B. This section is to help you better understand the central limit theorem.
+
+B.1. Simulate a standard normal sample with sample size n = 5, plot the sample and calculate the sample mean. (0.5 pt)
+```{r}
+data <- rnorm(5)
+hist(data, breaks = 5)
+mean(data)
+```
+
+B.2. Repeat the simulation for one million times, plot the distribution of the one million sample means. (0.5 pt)
+```{r}
+data <- sapply(1:1000000, function(x) mean(rnorm(5)))
+hist(data, breaks = 5)
+mean(data)
+sd(data)
+```
+
+
+B.3. Now increase the sample size to 10. Repeat the above simulation and record the distribution of the one million sample means. (0.5 pt)
+```{r}
+data <- sapply(1:1000000, function(x) mean(rnorm(10)))
+hist(data)
+mean(data)
+sd(data)
+```
+
+B.4. Now further increase the sample size to 20, 50, 100, and 1000. Repeat the above simulation. Show how the distribution of the one million sample means changes. (1 pt)
+```{r}
+for(sample_size in c(20,50,100,1000)) {
+  data <- sapply(1:1000000, function(x) mean(rnorm(sample_size)))
+  hist(data)
+  mean(data)
+  sd(data)
+}
+```
+
+B.5. Now let’s change the simulation to an exponential sample. Set the rate lambda = 0.1, 0.5, and 1. Repeat B.1-B.4 and show the sample mean change under each parameter setting. (1 pt)
+
+```{r}
+data <- rexp(5)
+hist(data, breaks = 5)
+mean(data)
+for(sample_size in c(5,10,20,50,100,1000)) {
+  data <- sapply(1:1000000, function(x) mean(rexp(sample_size)))
+  hist(data)
+  mean(data)
+  sd(data)
+}
+```
+
+B.6. Now let’s change to a Poisson sample. Set lambda = 1, 5, and 10. Repeat B.1-B.4 and show the sample mean change under each parameter setting. (1 pt)
+```{r}
+data <- rnorm(5)
+hist(data, breaks = 5)
+mean(data)
+for(sample_size in c(5,10,20,50,100,1000)) {
+  data <- sapply(1:1000000, function(x) mean(rpois(sample_size)))
+  hist(data)
+  mean(data)
+  sd(data)
+}
+```
+B.7. What can we conclude from this simulation study? (0.5 pt)
+As the sample sizes of the 
+Hint:
+1) You can use these R functions for simulation:
+rnorm()
+rexp()
+rpois()
+2) Set an appropriate bin size when plotting a histogram.

@@ -1,0 +1,2 @@
+"0","data <- sapply(1:1000000, function(x) mean(rnorm(10)))"
+"0","hist(data)"

@@ -1,0 +1,10 @@
+"0","length(BiocManager::available())"
+"2","'getOption(""repos"")' replaces Bioconductor standard repositories, see
+'help(""repositories"", package = ""BiocManager"")' for details.
+Replacement repositories:
+    CRAN: https://cran.rstudio.com/
+"
+"1","[1]"
+"1"," 23964"
+"1","
+"

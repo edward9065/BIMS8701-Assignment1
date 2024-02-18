@@ -1,0 +1,2 @@
+"0","data <- rexp(5)"
+"0","hist(data, breaks = 5)"
